@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automated Explosive Facility Siting Form (kg input)</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.css"/>
+  <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+      background-color: #f4f4f9;
+    }
+    h2 {
+      text-align: center;
+      text-decoration: underline;
+      color: #333;
+    }
+    .section {
+      margin: 20px 0;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"],
+    select,
+    textarea {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    .inline-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .inline-group > * {
+      flex: 1;
+      min-width: 200px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table,
+    th,
+    td {
+      border: 1px solid #ccc;
+    }
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    th {
+        background-color: #e9ecef;
+    }
+    .coord-display {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 5px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      background-color: #007bff;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    button.map-btn {
+        background-color: #28a745;
+    }
+    button.map-btn:hover {
+        background-color: #218838;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 4% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%;
+        max-width: 800px;
+        border-radius: 8px;
+    }
+    #map {
+        height: 500px;
+        width: 100%;
+        border-radius: 5px;
+    }
+    .nec-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 5px; /* Space between input and button */
+    }
+    .nec-input-wrapper input {
+        flex-grow: 1;
+        margin-bottom: 0; /* Remove default margin from input */
+    }
+    .nec-input-wrapper button {
+        margin-top: 0; /* Remove default margin from button */
+        padding: 6px 10px; /* Smaller padding for inline button */
+        font-size: 12px;
+        white-space: nowrap; /* Prevent button text from wrapping */
+    }
+    @media print {
+      button, .modal, .geosearch.bar, .nec-input-wrapper button {
+        display: none !important;
+      }
+      body {
+        padding: 0;
+        background-color: #fff;
+      }
+      .section {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+      .coord-display {
+          color: #000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>PROFORMA FOR SITING OF NEW EXPLOSIVE FACILITIES</h2>
+  <p style="text-align: center;">(Use separate form for each building)</p>
+
+  <div class="section">
+    <label>1. Name of Factory/Estt/Unit</label>
+    <input type="text" name="factoryName" />
+    <label>2. Section/Division/Command</label>
+    <input type="text" name="section" />
+    <label>3. Proposed Bldg No. (Type with dimensions)</label>
+    <div class="inline-group">
+      <select name="buildingType" id="buildingType" onchange="recalculateAllRows()">
+        <option value="">Select Type</option>
+        <option value="ESH">ESH</option>
+        <option value="Igloo">Igloo</option>
+        <option value="Bunker">Bunker</option>
+        <option value="Magazine">Magazine</option>
+        <option value="Process">Process</option>
+      </select>
+      <input type="text" placeholder="Enter Dimensions (e.g., 10x20x5 ft)" name="dimensions" />
+    </div>
+    <label>4. Whether Storage Building or Process Building</label>
+    <select name="buildingUse" id="buildingUse" onchange="toggleActivityDesc()">
+      <option value="">Select Option</option>
+      <option value="Storage">Storage</option>
+      <option value="Process">Process</option>
+    </select>
+    <div id="activityDesc" style="display: none">
+      <label>Describe proposed activities (if Process Bldg):</label>
+      <textarea rows="3" name="activityDescription"></textarea>
+    </div>
+    <label>5. Whether the building is proposed to be traversed?</label>
+    <select name="traversed" id="traversed" onchange="toggleTraverseType()">
+      <option value="">Select Option</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+    <div id="traverseType" style="display: none">
+      <label>Type of Traverse (NAT, VIFT, Bunker, Blast wall etc.)</label>
+      <textarea rows="2" name="traverseDescription"></textarea>
+    </div>
+  </div>
+  <div class="section">
+    <label>6. SIQD/PIQD required from the proposed building to surrounding buildings (Refer QD Tables of STEC 1)</label>
+    <table id="siqdTable">
+      <thead>
+        <tr>
+          <th>(a)<br>Proposed Bldg No.</th>
+          <th>(b)<br>Gross Tonnage & NEC (kg)</th>
+          <th>(c)<br>Hazard Division</th>
+          <th colspan="2">(d)<br>QD Required (m)<br /><small>SIQD / PIQD</small></th>
+          <th>(e)<br>Surrounding Bldg/Utility No.</th>
+          <th>(f)<br>Distance Available (m)</th>
+          <th>Remarks</th>
+        </tr>
+        <tr><th></th><th></th><th></th><th>SIQD</th><th>PIQD</th><th></th><th></th><th></th></tr>
+      </thead>
+      <tbody id="siqdTable-body">
+        <tr>
+          <td>
+            <button type="button" class="map-btn" data-type="proposed">Select on Map</button>
+            <input type="hidden" class="coord-input" name="proposedCoord">
+            <div class="coord-display"></div>
+          </td>
+          <td>
+            <div class="nec-input-wrapper">
+                <input type="text" class="nec-input" oninput="calculateRequiredDistances(this.closest('tr'))" />
+                <button type="button" onclick="calculateRequiredDistances(this.closest('tr'))">Calc</button>
+            </div>
+          </td>
+          <td><input type="text" /></td>
+          <td><input type="text" class="siqd-output" readonly /></td>
+          <td><input type="text" class="piqd-output" readonly /></td>
+          <td>
+            <button type="button" class="map-btn" data-type="surrounding">Select on Map</button>
+            <input type="hidden" class="coord-input" name="surroundingCoord">
+            <div class="coord-display"></div>
+          </td>
+          <td><input type="text" class="distance-output" readonly /></td>
+          <td><input type="text" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <button onclick="addRow()">➕ Add Row</button>
+  </div>
+  <button onclick="window.print()">🖨️ Print Page</button>
+
+  <div id="mapModal" class="modal">
+    <div class="modal-content">
+      <h3>Select Location on Map</h3>
+      <p>Use the search bar or click directly on the map to place a marker.</p>
+      <div id="map"></div>
+      <button id="confirmLocationBtn">Confirm Location</button>
+      <button onclick="closeModal()" style="background-color:#6c757d;">Cancel</button>
+    </div>
+  </div>
+
+<script>
+    // ================== IMPORTANT ==================
+    // PASTE YOUR FREE GEOAPIFY API KEY HERE
+    const myApiKey = "cc669cd6f26e4292a37eab275b431c20"; // <--- Using the key from the original file.
+    // ===============================================
+
+    // --- Core Form and Map Logic ---
+    const modal = document.getElementById('mapModal');
+    const mapElement = document.getElementById('map');
+    const tableBody = document.getElementById('siqdTable-body');
+    let map, marker, activeBtn;
+
+    function toggleActivityDesc() { document.getElementById('activityDesc').style.display = document.getElementById('buildingUse').value === 'Process' ? 'block' : 'none'; }
+    function toggleTraverseType() { document.getElementById('traverseType').style.display = document.getElementById('traversed').value === 'Yes' ? 'block' : 'none'; }
+
+    function initializeMap() {
+        if (map) {
+            map.remove(); 
+        }
+        map = L.map(mapElement).setView([28.5355, 77.3910], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        if (myApiKey && myApiKey !== "PASTE_YOUR_API_KEY_HERE") {
+            const provider = new GeoSearch.GeoapifyProvider({ params: { apiKey: myApiKey } });
+            const geosearch = new GeoSearch.GeoSearchControl({ provider: provider, style: 'bar', autoClose: true, keepResult: true, updateMap: true });
+            map.addControl(geosearch);
+        } else {
+            console.warn("Geoapify API key is missing or is default. Map search functionality will not work.");
+        }
+
+        map.on('geosearch/showlocation', (result) => {
+            if (marker) map.removeLayer(marker);
+            const latlng = result.location.raw.point ? L.latLng(result.location.raw.point.lat, result.location.raw.point.lon) : L.latLng(result.location.y, result.location.x);
+            marker = L.marker(latlng).addTo(map);
+            map.setView(latlng, map.getZoom());
+        });
+        map.on('click', (e) => {
+            if (marker) map.removeLayer(marker);
+            marker = L.marker(e.latlng).addTo(map);
+        });
+    }
+
+    function openModal(button) {
+        activeBtn = button;
+        modal.style.display = "block";
+        setTimeout(() => {
+            initializeMap();
+            map.invalidateSize(); 
+            if(marker) map.removeLayer(marker);
+            marker = null;
+        }, 10);
+    }
+    function closeModal() { modal.style.display = "none"; }
+
+    tableBody.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('map-btn')) {
+            openModal(e.target);
+        }
+    });
+
+    document.getElementById('confirmLocationBtn').addEventListener('click', function() {
+        if (marker && activeBtn) {
+            const latlng = marker.getLatLng();
+            const parentCell = activeBtn.closest('td');
+            const coordInput = parentCell.querySelector('.coord-input');
+            const coordDisplay = parentCell.querySelector('.coord-display');
+
+            coordInput.value = JSON.stringify({ lat: latlng.lat, lon: latlng.lng });
+            coordDisplay.innerHTML = `Lat: ${latlng.lat.toFixed(4)}, Lon: ${latlng.lng.toFixed(4)}`;
+            activeBtn.textContent = `📍 Location Set`;
+            activeBtn.style.backgroundColor = '#17a2b8';
+
+            const parentRow = activeBtn.closest('tr');
+            updateAvailableDistance(parentRow); // This now correctly calls the defined function below
+            closeModal();
+        } else {
+            alert('Please click on the map or use search to place a marker before confirming.');
+        }
+    });
+    
+    /**
+     * [FIXED] Calculates the available distance between two coordinates in a row.
+     * This function was missing.
+     * @param {HTMLTableRowElement} row The table row element.
+     */
+    function updateAvailableDistance(row) {
+        // Find the input fields for both coordinates within the given row
+        const proposedCoordInput = row.querySelector('button[data-type="proposed"]').parentElement.querySelector('.coord-input');
+        const surroundingCoordInput = row.querySelector('button[data-type="surrounding"]').parentElement.querySelector('.coord-input');
+        const distanceOutput = row.querySelector('.distance-output');
+
+        // Proceed only if both coordinate inputs have values
+        if (proposedCoordInput.value && surroundingCoordInput.value) {
+            try {
+                const coord1 = JSON.parse(proposedCoordInput.value);
+                const coord2 = JSON.parse(surroundingCoordInput.value);
+
+                // Use Leaflet's built-in distance calculation method
+                const latLng1 = L.latLng(coord1.lat, coord1.lon);
+                const latLng2 = L.latLng(coord2.lat, coord2.lon);
+                
+                const distance = latLng1.distanceTo(latLng2); // Distance in meters
+
+                // Update the 'Distance Available' field with the result
+                distanceOutput.value = distance.toFixed(2);
+            } catch (e) {
+                console.error("Error parsing coordinates or calculating distance:", e);
+                distanceOutput.value = 'Error';
+            }
+        } else {
+             // If one of the coordinates isn't set, ensure the distance field is empty
+             distanceOutput.value = '';
+        }
+    }
+
+
+    function addRow() {
+        const newRow = tableBody.rows[0].cloneNode(true);
+        newRow.querySelectorAll('input').forEach(input => {
+          if (input.type === 'text' || input.type === 'hidden') {
+              input.value = '';
+          }
+        });
+        newRow.querySelector('.siqd-output').value = '';
+        newRow.querySelector('.piqd-output').value = '';
+        newRow.querySelector('.distance-output').value = '';
+        newRow.querySelectorAll('.map-btn').forEach(btn => {
+            btn.textContent = 'Select on Map';
+            btn.style.backgroundColor = '';
+        });
+        newRow.querySelectorAll('.coord-display').forEach(div => {
+            div.innerHTML = '';
+        });
+        tableBody.appendChild(newRow);
+    }
+
+    // --- Calculation Logic ---
+    function calculateRequiredDistances(row) {
+      const buildingType = document.getElementById('buildingType').value;
+      const necInput = row.querySelector('.nec-input');
+      const siqdOutput = row.querySelector('.siqd-output');
+      const piqdOutput = row.querySelector('.piqd-output');
+      const nec_in_kg = parseFloat(necInput.value);
+
+      if (!buildingType || isNaN(nec_in_kg) || nec_in_kg <= 0) {
+          siqdOutput.value = '';
+          piqdOutput.value = '';
+          return;
+      }
+
+      const nec_in_tons = nec_in_kg / 1000;
+      const Z = Math.pow(nec_in_tons, 1 / 3);
+
+      let siqd = 0;
+      let piqd = 0;
+
+      switch (buildingType) {
+          case 'ESH':
+              siqd = 2.4 * Z;
+              piqd = 8 * Z;
+              break;
+          case 'Igloo':
+              siqd = 0.5 * Z;
+              piqd = 7 * Z;
+              break;
+          case 'Bunker':
+              siqd = 2 * Z;
+              piqd = 4 * Z;
+              break;
+          default:
+              siqdOutput.value = 'N/A';
+              piqdOutput.value = 'N/A';
+              return;
+      }
+
+      siqdOutput.value = siqd.toFixed(2);
+      piqdOutput.value = piqd.toFixed(2);
+    }
+
+  function recalculateAllRows() {
+      const rows = document.querySelectorAll('#siqdTable-body tr');
+      rows.forEach(row => {
+          const necInput = row.querySelector('.nec-input');
+          if (necInput.value && !isNaN(parseFloat(necInput.value))) {
+              calculateRequiredDistances(row);
+          }
+      });
+  }
+
+  document.getElementById('buildingType').addEventListener('change', recalculateAllRows);
+  window.calculateRequiredDistances = calculateRequiredDistances;
+  window.recalculateAllRows = recalculateAllRows;
+</script>
+</body>
+</html>
