@@ -1,0 +1,169 @@
+/* DRDO-Themed Professional Stylesheet */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 30px;
+  max-width: 1000px;
+  margin: auto;
+  background-color: #f0f4f9;
+  color: #2c3e50;
+}
+
+h2, h3 {
+  text-align: center;
+  color: #003366; /* Navy Blue */
+}
+
+h2 {
+  text-decoration: underline;
+}
+
+.section {
+  margin: 20px 0;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  border-left: 6px solid #003366;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #003366;
+}
+
+input[type="text"],
+select,
+textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 15px;
+  background-color: #fefefe;
+}
+
+.inline-group {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.inline-group > * {
+  flex: 1;
+  min-width: 200px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background-color: #fff;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+th {
+  background-color: #d6e0f0;
+  color: #003366;
+}
+
+.coord-display {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 5px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  background-color: #003366;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #002244;
+}
+
+button.map-btn {
+  background-color: #007b8a; /* Teal-blue */
+}
+
+button.map-btn:hover {
+  background-color: #005f66;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 4% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 8px;
+}
+
+#map {
+  height: 500px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+/* New and updated styles */
+.warning-title {
+    color: #d9534f; /* Reddish warning color */
+    border-bottom: 2px solid #d9534f;
+    padding-bottom: 10px;
+}
+
+.shortfall-cell {
+    font-weight: bold;
+    color: #d9534f; /* Reddish warning color */
+}
+
+.remarks-output {
+    font-weight: bold;
+}
+
+@media print {
+  button, .modal, .geosearch.bar, #violationSummarySection {
+    display: none !important;
+  }
+  body {
+    padding: 0;
+    background-color: #fff;
+  }
+  .section {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  .coord-display {
+    color: #000 !important;
+  }
+}
