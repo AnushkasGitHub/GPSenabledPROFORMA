@@ -6,32 +6,33 @@
   <title>Automated Explosive Facility Siting Form</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.css"/>
   <link rel="stylesheet" href="styles.css" />
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h2>PROFORMA FOR SITING OF NEW EXPLOSIVE FACILITIES</h2>
   <p style="text-align: center;">(Use separate form for each building) </p>
 
   <div class="section">
-    <h3>Proposed Building (X) Details</h3>
-    <div class="inline-group">
-        <div>
-            <label>1. Proposed Bldg No. / Name </label>
-            <input type="text" id="proposedBldgName" placeholder="e.g., Magazine-01">
-        </div>
-        <div>
-            <label>Set Location of Proposed Building (X)</label>
-            <button type="button" class="map-btn" id="setProposedLocationBtn">Set on Map</button>
-            <div id="proposedCoordDisplay" class="coord-display"></div>
+    <div class="header-controls">
+        <h3>Proposed Building (X) Details</h3>
+        <div class="unit-selector-container">
+            <label for="unitSelector">Distance Unit:</label>
+            <select id="unitSelector">
+                <option value="m">Meters (m)</option>
+                <option value="ft">Feet (ft)</option>
+            </select>
         </div>
     </div>
-     <div class="inline-group">
+    <div class="inline-group">
         <div>
-            <label>2. Building Type (e.g., ESH, Igloo) </label>
+            <label>1. Proposed Bldg No. / Name</label>
+            <input type="text" id="proposedBldgName" placeholder="e.g., Magazine-01">
+        </div>
+         <div>
+            <label>2. Building Type (e.g., ESH, Igloo)</label>
             <select id="buildingType">
                 <option value="">Select Type</option>
                 <option value="ESH">ESH</option>
@@ -40,14 +41,28 @@
                 <option value="Process">Process</option>
             </select>
         </div>
+    </div>
+     <div class="inline-group">
+        <div>
+            <label>Proposed Bldg Latitude</label>
+            <input type="text" id="proposedBldgLat" placeholder="e.g., 28.6139">
+        </div>
+        <div>
+            <label>Proposed Bldg Longitude</label>
+            <input type="text" id="proposedBldgLon" placeholder="e.g., 77.2090">
+        </div>
+        <div>
+            <label>View Building Location</label>
+            <button type="button" class="map-btn" id="setProposedLocationBtn">Set / View on Map</button>
+        </div>
+    </div>
+    <div class="inline-group">
         <div>
             <label>3. NEC of Proposed Building (kg)</label>
             <input type="text" id="proposedBldgNec" placeholder="e.g., 500">
         </div>
-    </div>
-    <div class="inline-group">
-       <div>
-            <label>4. Storage or Process Building </label>
+        <div>
+            <label>4. Storage or Process Building</label>
             <select id="buildingUse">
               <option value="">Select Use</option>
               <option value="Storage">Storage</option>
@@ -58,27 +73,30 @@
             <label>5. Hazard Division</label>
             <input type="text" id="proposedBldgHazardDiv" placeholder="e.g., 1.1">
         </div>
+        <div>
+            <label>6. Traversed / Non-traversed</label>
+            <select id="traversedType">
+              <option value="Non-traversed">Non-traversed</option>
+              <option value="Traversed">Traversed</option>
+            </select>
+        </div>
     </div>
   </div>
 
   <div class="section">
-    <label>6. SIQD/PIQD from Proposed Building to Surrounding Buildings </label>
+    <label>7. SIQD/PIQD from Proposed Building to Surrounding Buildings </label>
     <table id="proposedToSurroundingTable">
       <thead>
         <tr>
-          <th>(a)<br>Proposed Bldg No. </th>
-          <th>(b)<br>Surrounding Bldg (Y) No. </th>
-          <th colspan="2">(c)<br>QD Required (m) </th>
-          <th>(d)<br>Distance Available (m) </th>
-          <th>(e)<br>Remarks </th>
+          <th rowspan="2" class="col-pro-name">(a)<br>Proposed Bldg No.</th>
+          <th rowspan="2" class="col-sur-details">(b)<br>Surrounding Bldg (Y) Details</th>
+          <th colspan="2">(c)<br>QD Required (<span class="unit-label">m</span>)</th>
+          <th rowspan="2" class="col-distance">(d)<br>Distance Available (<span class="unit-label">m</span>)</th>
+          <th rowspan="2" class="col-remarks">(e)<br>Remarks</th>
         </tr>
         <tr>
-          <th></th>
-          <th></th>
-          <th>SIQD</th>
-          <th>PIQD</th>
-          <th></th>
-          <th></th>
+          <th class="col-qd">SIQD</th>
+          <th class="col-qd">PIQD</th>
         </tr>
       </thead>
       <tbody id="proposedToSurroundingTable-body">
@@ -88,42 +106,50 @@
   </div>
 
   <div class="section">
-      <label>7. SIQD/PIQD from Surrounding Buildings to Proposed Building </label>
+      <label>8. SIQD/PIQD from Surrounding Buildings to Proposed Building</label>
       <table id="surroundingToProposedTable">
           <thead>
               <tr>
-                  <th>(a)<br>Surrounding Bldg (Y) No. </th>
-                  <th>(b)<br>NEC of Y (kg) </th>
-                  <th>(c)<br>Use Type</th>
-                  <th>(d)<br>Hazard Div. of Y </th>
-                  <th colspan="2">(e)<br>QD Required by Y (m) </th>
-                  <th>(f)<br>Distance Available (m) </th>
-                  <th>(g)<br>Remarks </th>
+                  <th rowspan="2" class="col-sur-name">(a)<br>Surrounding Bldg (Y) No.</th>
+                  <th rowspan="2" class="col-nec">(b)<br>NEC of Y (kg)</th>
+                  <th rowspan="2" class="col-type">(c)<br>Type of Y</th>
+                  <th rowspan="2" class="col-use">(d)<br>Use Type</th>
+                  <th rowspan="2" class="col-hazard">(e)<br>Hazard Div. of Y</th>
+                  <th colspan="2">(f)<br>QD Required by Y (<span class="unit-label">m</span>)</th>
+                  <th rowspan="2" class="col-distance">(g)<br>Distance Available (<span class="unit-label">m</span>)</th>
+                  <th rowspan="2" class="col-remarks">(h)<br>Remarks</th>
               </tr>
               <tr>
-                  <th></th><th></th><th></th><th></th><th>SIQD</th><th>PIQD</th><th></th><th></th>
+                  <th class="col-qd">SIQD</th>
+                  <th class="col-qd">PIQD</th>
               </tr>
           </thead>
           <tbody id="surroundingToProposedTable-body">
-              </tbody>
+          </tbody>
       </table>
   </div>
 
-  <div class="section" id="violationSummarySection" style="display: none;">
+  <div class="section" id="violationSummarySection">
       <h3 class="warning-title">⚠️ Safety Distance Violation Summary</h3>
       <table id="violationSummaryTable">
-          <thead>
-              <tr>
-                  <th>Violating Pair</th>
-                  <th>Required Distance (m)</th>
-                  <th>Available Distance (m)</th>
-                  <th>Shortfall (%)</th>
-                  <th>Suggestions</th>
-              </tr>
-          </thead>
-          <tbody id="violationSummaryTable-body">
-              </tbody>
-      </table>
+    <thead>
+        <tr>
+            <th>Building Pair</th>
+            <th>Required Distance (<span class="unit-label">m</span>)</th>
+            <th>Available Distance (<span class="unit-label">m</span>)</th>
+            <th>Shortfall (%)</th>
+            <th>Status</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody id="violationSummaryTable-body">
+    </tbody>
+</table>
+  </div>
+
+  <div class="section" id="chartSection" style="display: none;">
+      <h3 class="chart-title">📊 Violation Analysis Chart</h3>
+      <canvas id="violationChart"></canvas>
   </div>
 
 
@@ -131,7 +157,7 @@
 
   <div id="mapModal" class="modal">
     <div class="modal-content">
-      <h3>Select Location on Map</h3>
+      <h3>Set / View Location on Map</h3>
       <div id="map"></div>
       <button id="confirmLocationBtn">Confirm Location</button>
       <button id="cancelModalBtn" style="background-color:#6c757d;">Cancel</button>
