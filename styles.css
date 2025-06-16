@@ -171,6 +171,15 @@ button.map-btn:hover {
   z-index: 1; /* Ensure map is clickable */
 }
 
+/* Style for the new output map */
+#outputMap {
+    height: 600px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 15px;
+}
+
 /* Validation and Status Styles */
 .invalid-input {
     border: 2px solid #d9534f !important;
@@ -194,23 +203,181 @@ button.map-btn:hover {
     color: #d9534f;
 }
 
-/* Chart Styles */
-.chart-title {
+/* Map Title Styles */
+.map-title {
     color: #003366;
+    border-bottom: 2px solid #003366;
+    padding-bottom: 10px;
 }
 
+/* Legend Styles */
+.leaflet-control-legend {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    line-height: 1.6;
+    color: #333;
+}
+.leaflet-control-legend h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #003366;
+}
+.leaflet-control-legend i {
+    width: 20px;
+    height: 10px;
+    float: left;
+    margin-right: 8px;
+    border-width: 2px;
+    border-style: solid;
+}
+.leaflet-control-legend .line {
+    height: 0;
+    border-top-width: 3px;
+    margin-top: 5px;
+}
+.leaflet-control-legend .dashed {
+    border-style: dashed;
+}
+
+/* Row highlighting for summary table */
+#violationSummaryTable tbody tr {
+    transition: background-color 0.2s ease-in-out;
+}
+#violationSummaryTable tbody tr.row-group-safe td {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+#violationSummaryTable tbody tr.row-group-violation td {
+    background-color: rgba(217, 83, 79, 0.1);
+}
+
+#violationSummaryTable tbody tr:hover td {
+    background-color: rgba(214, 224, 240, 0.7);
+}
+
+
+/********************************************************/
+/****************** PRINT STYLES BEGIN ******************/
+/********************************************************/
+
 @media print {
-  button, .modal, #unitSelector, #chartSection, #violationSummarySection {
+  /* Hide non-essential elements */
+  button, .modal, #unitSelector, .leaflet-control-zoom, .leaflet-control-legend, .header-controls .unit-selector-container, .map-btn {
     display: none !important;
   }
+
   body {
     padding: 0;
+    margin: 0;
     background-color: #fff;
     max-width: 100%;
+    font-size: 10pt;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
+
   .section {
     box-shadow: none;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
+    border-left: 6px solid #003366 !important;
     page-break-inside: avoid;
+    padding: 15px;
+    margin: 15px 0;
   }
+
+  h2, h3 {
+      font-size: 14pt;
+      color: #003366 !important;
+  }
+
+  /* --- GENERAL RULE for inputs/selects in print --- */
+  /* This applies to the top sections and the first table */
+  input[type="text"], select {
+      border: 1px solid #ccc !important;
+      background-color: #fff !important;
+      padding: 4px !important;
+      font-size: 9pt !important;
+      -webkit-appearance: none; /* Reset appearance for consistency */
+      -moz-appearance: none;
+      appearance: none;
+  }
+  td input, td select {
+      width: 95%;
+      margin: 0 auto;
+  }
+
+  /* --- SPECIFIC RULE for the requested table --- */
+  /* This overrides the general rule ONLY for the second table */
+  #surroundingToProposedTable input,
+  #surroundingToProposedTable select {
+      border: none !important;
+      background-color: transparent !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100%;
+      font-size: inherit !important; /* Inherit from the table cell */
+      color: inherit;
+      text-align: center;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+  }
+
+  /* Table-specific print adjustments */
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 10px;
+      page-break-inside: auto;
+  }
+
+  th, td {
+      border: 1px solid #ccc !important;
+      padding: 8px 5px;
+      font-size: 9pt;
+      word-wrap: break-word;
+      vertical-align: middle;
+      text-align: center;
+  }
+
+  th {
+    background-color: #d6e0f0 !important;
+    color: #003366 !important;
+  }
+
+  /* Ensure background colors for rows print correctly */
+  #violationSummaryTable tbody tr.row-group-safe td {
+    background-color: rgba(40, 167, 69, 0.1) !important;
+  }
+  #violationSummaryTable tbody tr.row-group-violation td {
+    background-color: rgba(217, 83, 79, 0.1) !important;
+  }
+
+  /* Ensure remarks and shortfall text colors print */
+  .remarks-output.safe {
+      color: #28a745 !important;
+  }
+  .remarks-output.violation, .shortfall-cell {
+      color: #d9534f !important;
+  }
+
+  /* Map styles */
+  #outputMap {
+      height: 350px;
+      page-break-inside: avoid;
+  }
+
+  .leaflet-pane, .leaflet-tile-pane, .leaflet-overlay-pane, .leaflet-shadow-pane, .leaflet-marker-pane, .leaflet-tooltip-pane, .leaflet-popup-pane, .leaflet-zoom-animated {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+  }
+
+  
 }
+
+/********************************************************/
+/******************* PRINT STYLES END *******************/
+/********************************************************/
