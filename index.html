@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="styles.css" />
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+  </head>
 <body>
   <h2>PROFORMA FOR SITING OF NEW EXPLOSIVE FACILITIES</h2>
   <p style="text-align: center;">(Use separate form for each building) </p>
@@ -132,24 +131,24 @@
   <div class="section" id="violationSummarySection">
       <h3 class="warning-title">⚠️ Safety Distance Violation Summary</h3>
       <table id="violationSummaryTable">
-    <thead>
-        <tr>
-            <th>Building Pair</th>
-            <th>Required Distance (<span class="unit-label">m</span>)</th>
-            <th>Available Distance (<span class="unit-label">m</span>)</th>
-            <th>Shortfall (%)</th>
-            <th>Status</th>
-            <th>Remarks</th>
-        </tr>
-    </thead>
-    <tbody id="violationSummaryTable-body">
-    </tbody>
-</table>
+        <thead>
+            <tr>
+                <th>Building Pair</th>
+                <th>Required Distance (<span class="unit-label">m</span>)</th>
+                <th>Available Distance (<span class="unit-label">m</span>)</th>
+                <th>Shortfall (%)</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody id="violationSummaryTable-body">
+        </tbody>
+    </table>
   </div>
 
-  <div class="section" id="chartSection" style="display: none;">
-      <h3 class="chart-title">📊 Violation Analysis Chart</h3>
-      <canvas id="violationChart"></canvas>
+  <div class="section" id="mapOutputSection">
+      <h3 class="map-title">🗺️ Siting Analysis Map</h3>
+      <div id="outputMap"></div>
   </div>
 
 
