@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Automated Explosive Facility Siting Form</title>
@@ -151,6 +154,17 @@
       <div id="outputMap"></div>
   </div>
 
+  <div class="section">
+    <h3>💾 Manage Analysis</h3>
+    <div class="inline-group">
+        <div>
+            <label for="analysisSelector">Load Existing Analysis</label>
+            <select id="analysisSelector"></select>
+        </div>
+        <button id="loadAnalysisBtn">Load Selected</button>
+        <button id="saveAnalysisBtn" style="background-color:#28a745;">Save Current as New</button>
+    </div>
+</div>
 
   <button onclick="window.print()">🖨️ Print Page</button>
 
