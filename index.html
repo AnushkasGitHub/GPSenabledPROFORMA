@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Automated Explosive Facility Siting Form</title>
@@ -34,13 +32,12 @@
             <input type="text" id="proposedBldgName" placeholder="e.g., Magazine-01">
         </div>
          <div>
-            <label>2. Building Type (e.g., ESH, Igloo)</label>
+            <label>2. Building Type</label>
             <select id="buildingType">
                 <option value="">Select Type</option>
-                <option value="ESH">ESH</option>
                 <option value="Igloo">Igloo</option>
                 <option value="Bunker">Bunker</option>
-                <option value="Process">Process</option>
+                <option value="Above Ground Magazine">Above Ground Magazine</option>
             </select>
         </div>
     </div>
@@ -76,27 +73,33 @@
             <input type="text" id="proposedBldgHazardDiv" placeholder="e.g., 1.1">
         </div>
         <div>
-            <label>6. Traversed / Non-traversed</label>
-            <select id="traversedType">
-              <option value="Non-traversed">Non-traversed</option>
-              <option value="Traversed">Traversed</option>
+            <label>6. PES Orientation (Traversed/Untraversed)</label>
+            <select id="proposedBldgPesOrientation">
+                <option value="">Select Orientation</option>
+                <option value="UT">Untraversed (UT)</option>
+                <option value="T">Traversed (T)</option>
             </select>
         </div>
+
+        
     </div>
   </div>
 
   <div class="section">
-    <label>7. SIQD/PIQD from Proposed Building to Surrounding Buildings </label>
+    <label>7. SIQD/PIQD from Proposed Building (X) to Surrounding Buildings (Y)</label>
     <table id="proposedToSurroundingTable">
       <thead>
         <tr>
-          <th rowspan="2" class="col-pro-name">(a)<br>Proposed Bldg No.</th>
+          <th rowspan="2" class="col-pro-name">(a)<br>Proposed Bldg (X)</th>
           <th rowspan="2" class="col-sur-details">(b)<br>Surrounding Bldg (Y) Details</th>
-          <th colspan="2">(c)<br>QD Required (<span class="unit-label">m</span>)</th>
-          <th rowspan="2" class="col-distance">(d)<br>Distance Available (<span class="unit-label">m</span>)</th>
-          <th rowspan="2" class="col-remarks">(e)<br>Remarks</th>
+          <th colspan="2">(c)<br>Orientation</th>
+          <th colspan="2">(d)<br>QD Required (<span class="unit-label">m</span>)</th>
+          <th rowspan="2" class="col-distance">(e)<br>Distance Available (<span class="unit-label">m</span>)</th>
+          <th rowspan="2" class="col-remarks">(f)<br>Remarks</th>
         </tr>
         <tr>
+          <th class="col-orientation">of X (PES)</th>
+          <th class="col-orientation">of Y (ES)</th>
           <th class="col-qd">SIQD</th>
           <th class="col-qd">PIQD</th>
         </tr>
@@ -108,20 +111,22 @@
   </div>
 
   <div class="section">
-      <label>8. SIQD/PIQD from Surrounding Buildings to Proposed Building</label>
+      <label>8. SIQD/PIQD from Surrounding Buildings (Y) to Proposed Building (X)</label>
       <table id="surroundingToProposedTable">
           <thead>
               <tr>
-                  <th rowspan="2" class="col-sur-name">(a)<br>Surrounding Bldg (Y) No.</th>
+                  <th rowspan="2" class="col-sur-name">(a)<br>Surrounding Bldg (Y)</th>
                   <th rowspan="2" class="col-nec">(b)<br>NEC of Y (kg)</th>
                   <th rowspan="2" class="col-type">(c)<br>Type of Y</th>
                   <th rowspan="2" class="col-use">(d)<br>Use Type</th>
-                  <th rowspan="2" class="col-hazard">(e)<br>Hazard Div. of Y</th>
+                  <th colspan="2">(e)<br>Orientation</th>
                   <th colspan="2">(f)<br>QD Required by Y (<span class="unit-label">m</span>)</th>
                   <th rowspan="2" class="col-distance">(g)<br>Distance Available (<span class="unit-label">m</span>)</th>
                   <th rowspan="2" class="col-remarks">(h)<br>Remarks</th>
               </tr>
               <tr>
+                  <th class="col-orientation">of Y (PES)</th>
+                  <th class="col-orientation">of X (ES)</th>
                   <th class="col-qd">SIQD</th>
                   <th class="col-qd">PIQD</th>
               </tr>
