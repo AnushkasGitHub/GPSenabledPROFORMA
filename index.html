@@ -31,14 +31,12 @@
             <label>1. Proposed Bldg No. / Name</label>
             <input type="text" id="proposedBldgName" placeholder="e.g., Magazine-01">
         </div>
-         <div>
+        <div class="type-container">
             <label>2. Building Type</label>
-            <select id="buildingType">
-                <option value="">Select Type</option>
-                <option value="Igloo">Igloo</option>
-                <option value="Bunker">Bunker</option>
-                <option value="Above Ground Magazine">Above Ground Magazine</option>
-            </select>
+            <div class="input-with-button">
+              <select id="buildingType">
+              </select>
+            </div>
         </div>
     </div>
      <div class="inline-group">
@@ -80,8 +78,6 @@
                 <option value="T">Traversed (T)</option>
             </select>
         </div>
-
-        
     </div>
   </div>
 
@@ -136,6 +132,169 @@
       </table>
   </div>
 
+  <div class="section">
+    <h3>9. OQD required from the proposed building</h3>
+    <table id="oqdTable">
+        <thead>
+            <tr>
+                <th style="width: 35%;">Utilities requiring OQD</th>
+                <th>OQD required from proposed bldg (m)</th>
+                <th>OQD available(m)</th>
+                <th>Remarks (if any)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>a. Dwelling houses</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>b. Public traffic route</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>c. Airport</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>d. HT lines</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>e. LT lines</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>f. Main P/Stn</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+             <tr>
+                <td>g. Main Gen Stn</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+             <tr>
+                <td>h. Mobile Towers</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+             <tr>
+                <td>i. O/H Water Tank</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>j. Assembly Places</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>(Any other utilities as given in STEC 1)</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>10. Building construction details (Refer STEC 3)</h3>
+    <div class="inline-group">
+        <div>
+            <label>(a) Material of Construction of walls and thickness</label>
+            <input type="text">
+        </div>
+        <div>
+            <label>(b) Material of construction of roof and thickness</label>
+            <input type="text">
+        </div>
+    </div>
+    <div class="inline-group">
+        <div>
+            <label>(c) Material of partition walls and their thickness (if required)</label>
+            <input type="text">
+        </div>
+        <div>
+            <label>(d) Material of construction of floor</label>
+            <input type="text">
+        </div>
+    </div>
+    <div>
+        <label>(e) Material of construction of Doors/ Windows/ ventilators with proposed sizes</label>
+        <input type="text">
+    </div>
+    <div class="inline-group">
+        <div>
+            <label>(f) Window panes</label>
+            <select>
+                <option value="">Select Type</option>
+                <option value="Ordinary">Ordinary</option>
+                <option value="Toughened">Toughened</option>
+                <option value="Shatter proof">Shatter proof</option>
+            </select>
+        </div>
+        <div>
+            <label>(g) Details of construction of Traverse (If applicable)</label>
+            <input type="text">
+        </div>
+    </div>
+    <div>
+        <label>(h) Dimension of the loading platform & the gradient/ size of ramp and stairs for movement of PLT, if required</label>
+        <input type="text">
+    </div>
+    <div>
+        <label>(i) Any special design features proposed</label>
+        <input type="text">
+    </div>
+     <div>
+        <label style="margin-top: 20px;"><b>11. Location of the proposed building (enclosed site plan):</b></label>
+        <input type="text" placeholder="e.g., Site plan enclosed as Annexure 'A'">
+    </div>
+  </div>
+  
+  <div class="section">
+      <h3>12. Electrical Installation</h3>
+      <div>
+          <label>(a) Type of electrical equipment/ fittings proposed</label>
+          <input type="text">
+      </div>
+      <div class="inline-group">
+          <div>
+              <label>(b) Whether lightening protection required?</label>
+              <select>
+                  <option value="">Select</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+              </select>
+          </div>
+          <div>
+              <label>(c) Whether Air conditioning and humidity control required?</label>
+              <input type="text" placeholder="If so, enclose the proforma as given in Anx-I of STEC-8">
+          </div>
+      </div>
+      <div>
+          <label>(d) Measures required to prevent static change accumulation and dissipation. If so, give details</label>
+          <textarea rows="3"></textarea>
+      </div>
+  </div>
+
   <div class="section" id="violationSummarySection">
       <h3 class="warning-title">⚠️ Safety Distance Violation Summary</h3>
       <table id="violationSummaryTable">
@@ -159,7 +318,7 @@
       <div id="outputMap"></div>
   </div>
 
-  <div class="section">
+  <div class="section" id="manageAnalysisSection">
     <h3>💾 Manage Analysis</h3>
     <div class="inline-group">
         <div>
@@ -168,6 +327,18 @@
         </div>
         <button id="loadAnalysisBtn">Load Selected</button>
         <button id="saveAnalysisBtn" style="background-color:#28a745;">Save Current as New</button>
+    </div>
+</div>
+
+<div id="signatureSection">
+    <div class="signature-block head-of-estt">
+        <p>(Signature of the Head of Estt/ CO Unit)</p>
+    </div>
+    <div class="recommendation-block">
+        <h4>Recommendation of CEES</h4>
+    </div>
+    <div class="signature-block cees-rep">
+        <p>Signature of Rep. CEES, Delhi.</p>
     </div>
 </div>
 
