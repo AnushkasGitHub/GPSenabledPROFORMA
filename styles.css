@@ -401,5 +401,114 @@ button.map-btn:hover {
   .cees-rep {
       text-align: left; /* Aligns block to the left */
   }
+}
 
+/* ==========================================================================
+   MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.2em;
+    }
+
+    /* Stack form groups vertically */
+    .inline-group {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    /* --- Responsive Tables --- */
+    .responsive-table-container {
+        overflow-x: auto;
+    }
+
+    table#proposedToSurroundingTable, 
+    table#surroundingToProposedTable,
+    table#oqdTable,
+    table#violationSummaryTable {
+        border: 0;
+    }
+
+    table#proposedToSurroundingTable thead, 
+    table#surroundingToProposedTable thead,
+    table#oqdTable thead,
+    table#violationSummaryTable thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    table#proposedToSurroundingTable tr,
+    table#surroundingToProposedTable tr,
+    table#oqdTable tr,
+    table#violationSummaryTable tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table#proposedToSurroundingTable td,
+    table#surroundingToProposedTable td,
+    table#oqdTable td,
+    table#violationSummaryTable td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+    
+    table#proposedToSurroundingTable td::before,
+    table#surroundingToProposedTable td::before,
+    table#oqdTable td::before,
+    table#violationSummaryTable td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        position: absolute;
+        left: 10px;
+        width: calc(50% - 20px);
+        text-align: left;
+    }
+    
+    td input[type="text"],
+    td input[type="number"],
+    td select {
+        text-align: right;
+    }
+
+    #map {
+        height: 400px;
+    }
+    #outputMap {
+        height: 400px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+        padding: 15px;
+    }
 }
