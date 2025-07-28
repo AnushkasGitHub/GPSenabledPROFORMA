@@ -47,7 +47,9 @@ label {
   color: #003366;
 }
 
+/* Default style for inputs NOT in a table */
 input[type="text"],
+input[type="number"],
 select,
 textarea {
   padding: 10px;
@@ -71,6 +73,16 @@ textarea {
 .inline-group > * {
   flex: 1;
   min-width: 200px;
+}
+
+.type-container .input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.type-container .input-with-button select {
+  flex-grow: 1;
+  margin-bottom: 0;
 }
 
 .coord-group {
@@ -103,12 +115,59 @@ th {
   font-weight: 600;
 }
 
-/* Fix for table input layout */
-td input, td select {
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
+/* On-screen style for inputs inside table cells */
+td input[type="text"],
+td input[type="number"],
+td select,
+td textarea {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    border-bottom: 1.5px solid #aab;
+    margin: 0;
+    padding: 4px 2px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 14px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align-last: center;
 }
+
+/* Style for when a user clicks into a field */
+td input[type="text"]:focus,
+td input[type="number"]:focus,
+td select:focus,
+td textarea:focus {
+    outline: none;
+    border-bottom: 2px solid #003366;
+}
+
+.invalid-input {
+  border-color: #d9534f !important;
+  border-bottom: 2px solid #d9534f !important;
+  background-color: #fbecec !important;
+}
+
+/* Style for the dynamic error message */
+.error-message {
+    color: #d9534f;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+/* Align error message in table cells */
+td .error-message {
+    text-align: center;
+}
+
+
 td {
   background-color: #fff;
 }
@@ -168,6 +227,7 @@ button.map-btn:hover {
   max-width: 800px;
   border-radius: 8px;
 }
+
 #map {
   height: 500px;
   width: 100%;
@@ -183,10 +243,6 @@ button.map-btn:hover {
   margin-top: 15px;
 }
 
-.invalid-input {
-  border: 2px solid #d9534f !important;
-  background-color: #fbecec !important;
-}
 .remarks-output.safe {
   font-weight: bold;
   color: #28a745;
@@ -252,15 +308,45 @@ button.map-btn:hover {
   background-color: rgba(214, 224, 240, 0.7);
 }
 
+/* Hide signature section on screen */
+#signatureSection {
+  display: none;
+}
+
 @media print {
-  button, .modal, .leaflet-control-zoom, .leaflet-control-legend, .header-controls .unit-selector-container, .map-btn {
+  /* Hide unwanted elements on print */
+  button, .modal, .leaflet-control-zoom, .leaflet-control-legend, 
+  .header-controls .unit-selector-container, .map-btn, 
+  #manageAnalysisSection, .error-message {
     display: none !important;
   }
+  
   body { padding: 0; margin: 0; background-color: #fff; max-width: 100%; font-size: 10pt; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .section { box-shadow: none; border: 1px solid #ddd; border-left: 6px solid #003366 !important; page-break-inside: avoid; padding: 15px; margin: 15px 0; }
   h2, h3 { font-size: 14pt; color: #003366 !important; }
-  input[type="text"], select { border: 1px solid #ccc !important; background-color: #fff !important; padding: 4px !important; font-size: 9pt !important; appearance: none; }
-  td input, td select { width: 95%; margin: 0 auto; }
+
+  /* Reset all inputs in print mode first */
+  input[type="text"], input[type="number"], select, textarea {
+    border: 1px solid #ccc !important;
+    background-color: #fff !important;
+    padding: 4px !important;
+    font-size: 9pt !important;
+  }
+
+  /* Specifically target inputs inside tables to look like plain text */
+  td input[type="text"], td input[type="number"], td select, td textarea {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 2px 0 !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      text-align: center;
+      width: 100% !important;
+      margin: 0 !important;
+  }
+
   table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 10px; page-break-inside: auto; }
   th, td { border: 1px solid #ccc !important; padding: 8px 5px; font-size: 9pt; }
   th { background-color: #d6e0f0 !important; color: #003366 !important; }
@@ -268,5 +354,52 @@ button.map-btn:hover {
   #violationSummaryTable tbody tr.row-group-violation td { background-color: rgba(217, 83, 79, 0.1) !important; }
   .remarks-output.safe { color: #28a745 !important; }
   .remarks-output.violation, .shortfall-cell { color: #d9534f !important; }
-  #outputMap { height: 350px; page-break-inside: avoid; }
+  
+  /* Make map bigger on print */
+  #outputMap { 
+    height: 550px !important; 
+    page-break-before: always;
+    margin-top: 0 !important; /* Reduces space above map on new page */
+    border: 1px solid #999 !important;
+  }
+
+  /* --- Styles for Signature Section on Print --- */
+  #signatureSection {
+    display: block !important;
+    border: none !important; box-shadow: none !important; background: none !important;
+    margin-top: 80px !important;
+    padding: 20px !important;
+    page-break-inside: avoid;
+  }
+
+  .signature-block {
+      margin-top: 70px; /* Vertical space for handwritten signature */
+  }
+  
+  .signature-block p {
+    font-size: 10pt !important;
+    border-top: 1px solid #333; /* Line for signing on */
+    padding-top: 8px;
+    display: inline-block; /* Makes the line only as wide as the text */
+  }
+  
+  .head-of-estt {
+      text-align: right; /* Aligns block to the right */
+  }
+  
+  .recommendation-block {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .recommendation-block h4 {
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 12pt !important;
+  }
+  
+  .cees-rep {
+      text-align: left; /* Aligns block to the left */
+  }
+
 }
